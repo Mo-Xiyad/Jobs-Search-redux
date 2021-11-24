@@ -1,25 +1,70 @@
 // import {} from "react-bootstrap";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import React from "react";
 import "./home.css";
 import SearchBar from "../search-Bar/SearchBar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { Button } from "react-bootstrap";
+import { addToFavorites, removeSelectedFavorites } from "../../redux/actions";
 
-export default function Home({ data, getSearchedData }) {
-  useEffect(() => {}, [data]);
+const mapStateToProps = (state) => state;
+
+const mapDispatchToProps = (dispatch) => ({
+  addItem: (itemToAdd) => {
+    dispatch(addToFavorites(itemToAdd));
+  },
+  removerAllFormFav: (itemToRemove) => {
+    dispatch(removeSelectedFavorites(itemToRemove));
+  },
+});
+
+const Home = ({
+  data,
+  getSearchedData,
+  addItem,
+  favorites,
+  removerAllFormFav,
+}) => {
+  const [selectedArray, setSelected] = useState([]);
+
+  const SelectFavorites = (element) => {
+    const { _id } = element;
+    const index = favorites.indexOf(_id);
+    if (index === -1) {
+      setSelected([...favorites, element]);
+      addItem(element);
+    } else {
+      setSelected([...favorites.filter((el) => el._id !== element._id)]);
+      // removerAllFormFav(element);
+    }
+  };
+
+  useEffect(() => {
+    console.log(selectedArray);
+  }, [data, selectedArray]);
   return (
     <div className="container h-100">
       <SearchBar getSearchedData={getSearchedData} />
+      <Link to={"/favorites"}>
+        <Button>Check out Favorites</Button>
+      </Link>
       <div className="container mt-5">
         {data.data &&
           data.data.map((result, i) => (
-            <div className="row" key={i}>
+            <div
+              className={
+                favorites.map((el) => el._id).includes(result._id)
+                  ? "row selected-job"
+                  : "row"
+              }
+              key={i}
+            >
               <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div className="well search-result">
                   <div className="col-xs-6 col-sm-9 col-md-9 col-lg-10 title">
                     <Link to={`jobLists/${result.company_name}`}>
                       <h3>{result.title}</h3>
-                      {/* <h3>{result._id}</h3> */}
                     </Link>
                     <p>
                       Ut quis libero id orci semper porta ac vel ante. In nec
@@ -44,6 +89,24 @@ export default function Home({ data, getSearchedData }) {
                         Job Type: <strong> {result.job_type}</strong>{" "}
                       </small>
                     </div>
+                    <div>
+                      <Button
+                        onClick={() => {
+                          SelectFavorites(result);
+                        }}
+                      >
+                        Add to Favorites
+                      </Button>
+                    </div>
+                    <br />
+                    <div>
+                      <Button
+                        variant="danger"
+                        onClick={() => removerAllFormFav(result)}
+                      >
+                        Remove
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -52,4 +115,6 @@ export default function Home({ data, getSearchedData }) {
       </div>
     </div>
   );
-}
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -22,3 +22,7 @@
   -moz-transition: max-height 0.5s ease;
   -webkit-transition: max-height 0.5s ease;
 }
+
+.selected-job {
+  background-color: aqua;
+}

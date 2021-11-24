@@ -5,6 +5,7 @@ import Home from "../src/components/home/Home.jsx";
 import Profile from "../src/components/profile/Profile.jsx";
 import { useState, useEffect } from "react";
 import { search } from "./helpers/index";
+import Favorites from "./components/favorites/Favorites";
 
 function App() {
   const [data, setData] = useState([]);
@@ -29,6 +30,8 @@ function App() {
             path="/"
             element={<Home data={data} getSearchedData={getSearchedData} />}
           />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/favorites/jobLists/:company" element={<Profile />} />
           <Route path="/jobLists/:company" element={<Profile />} />
           <Route path="*" element={<h1>Page not found</h1>} />
         </Routes>
