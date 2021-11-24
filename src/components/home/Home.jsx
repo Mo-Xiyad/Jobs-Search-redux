@@ -36,13 +36,11 @@ const Home = ({
       addItem(element);
     } else {
       setSelected([...favorites.filter((el) => el._id !== element._id)]);
-      // removerAllFormFav(element);
     }
   };
 
-  useEffect(() => {
-    console.log(selectedArray);
-  }, [data, selectedArray]);
+  useEffect(() => {}, [data, selectedArray]);
+
   return (
     <div className="container h-100">
       <SearchBar getSearchedData={getSearchedData} />

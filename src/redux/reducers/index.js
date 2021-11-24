@@ -1,7 +1,7 @@
 import { initialState } from "../store";
 import {
   ADD_TO_FAVORITES,
-  REMOVE_FROM_FAVORITES,
+  REMOVE_ONE_BY_ONE,
   REMOVE_SELECTED_FROM_FAVORITES,
 } from "../actions";
 const mainReducer = (state = initialState, action) => {
@@ -11,7 +11,7 @@ const mainReducer = (state = initialState, action) => {
         ...state,
         favorites: [...state.favorites, action.payload],
       };
-    case REMOVE_FROM_FAVORITES:
+    case REMOVE_ONE_BY_ONE:
       return {
         ...state,
         favorites: state.favorites.filter((el, i) => i !== action.payload),

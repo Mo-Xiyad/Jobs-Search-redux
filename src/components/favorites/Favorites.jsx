@@ -3,13 +3,25 @@ import { Link } from "react-router-dom";
 import "./style.css";
 import { Button } from "react-bootstrap";
 import { connect } from "react-redux";
-import { removeFromFavorites } from "../../redux/actions";
+import {
+  removeFromFavoritesOneByOne,
+  REMOVE_ONE_BY_ONE,
+} from "../../redux/actions";
 
 const mapStateToProps = (state) => state;
 
+// const mapDispatchToProps = (dispatch) => ({
+//   removeOneAtTime: (itemToRemove) => {
+//     dispatch(removeFromFavoritesOneByOne(itemToRemove));
+//   },
+// });
+
 const mapDispatchToProps = (dispatch) => ({
-  removeOneAtTime: (itemToRemove) => {
-    dispatch(removeFromFavorites(itemToRemove));
+  removeOneAtTime: function (itemToRemove) {
+    dispatch({
+      type: REMOVE_ONE_BY_ONE, //this is imported form the reducer file
+      payload: itemToRemove,
+    });
   },
 });
 
